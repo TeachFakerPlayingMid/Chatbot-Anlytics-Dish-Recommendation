@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MR. Chuan - Chinese Restaurant</title>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SH05WFRB1R"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-SH05WFRB1R', {'debug_mode': true});
+    </script>
+
+    <!-- React and CDN Links -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #d9534f;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        nav {
+            background-color: #f7f7f7;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        nav a {
+            color: #d9534f;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+        .category {
+            margin-bottom: 50px;
+        }
+        .category h2 {
+            color: #d9534f;
+            text-align: center;
+        }
+        .dishes {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .dish {
+            text-align: center;
+            margin: 20px;
+            cursor: pointer;
+        }
+        .dish img {
+            width: 200px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .dish-details {
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+            background-color: #f7f7f7;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .active .dish-details {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        function Dish({ dishName, imageSrc, description, spicyLevel }) {
+            const [isExpanded, setIsExpanded] = React.useState(false);
+    
+            const handleClick = () => {
+                setIsExpanded(!isExpanded);
+    
+                // Check if gtag is available
+                if (typeof window.gtag === 'function') {
+                    // console.log(`Sending event for: ${dishName}`);  // Log to console for debugging
+                    // Send event to Google Analytics
+                    window.gtag('event', 'dish_click', {
+                        'dish_name':dishName,
+                        'event_category': 'Dish',
+                        'event_label': spicyLevel,
+                        'value': 1
+                    });
+                } else {
+                    console.error('Google Analytics (gtag) not initialized properly.');
+                }
+            };
+    
+            return (
+                <div className={`dish ${isExpanded ? 'active' : ''}`} onClick={handleClick}>
+                    <img src={imageSrc} alt={dishName} />
+                    <h4>{dishName}</h4>
+                    {isExpanded && (
+                        <div className="dish-details">
+                            <p>{description}</p>
+                            <p><strong>Spicy Level: </strong>{spicyLevel}</p>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+    
+        function Category({ title, dishes }) {
+            return (
+                <div className="category">
+                    <h2>{title}</h2>
+                    <div className="dishes">
+                        {dishes.map(dish => (
+                            <Dish
+                                key={dish.name}
+                                dishName={dish.name}
+                                imageSrc={dish.image}
+                                description={dish.description}
+                                spicyLevel={dish.spicy}
+                            />
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+    
+        function App() {
+            const categories = [
+                { title: "Soup", dishes: [
+                    { name: "Hot and Sour Soup", image: "hot and sour soup.png", description: "A classic spicy and sour broth with tofu.", spicy: "Mild" },
+                    { name: "Wonton Soup", image: "wonton soup.png", description: "Delicious wontons in a light broth.", spicy: "None" },
+                    { name: "Egg Drop Soup", image: "egg drop soup.png", description: "Traditional egg drop soup.", spicy: "None" },
+                ]},
+                { title: "Noodle", dishes: [
+                    { name: "Beef Chow Fun", image: "beef chow fun.png", description: "Flat rice noodles stir-fried with beef.", spicy: "Medium" },
+                    { name: "Dan Dan Noodles", image: "dan dan noodles.png", description: "Spicy Sichuan noodles with minced pork.", spicy: "Hot" },
+                    { name: "Shrimp Lo Mein", image: "shrimp lo mein.png", description: "Classic lo mein with shrimp.", spicy: "Mild" },
+                ]},
+                { title: "Fried Rice", dishes: [
+                    { name: "Yangzhou Fried Rice", image: "yangzhou fried rice.png", description: "Mixed fried rice with BBQ pork.", spicy: "None" },
+                    { name: "Pineapple Fried Rice", image: "pineapple fried rice.png", description: "Sweet and savory fried rice with pineapple.", spicy: "None" },
+                    { name: "Vegetable Fried Rice", image: "vegetable fried rice.png", description: "Stir-fried rice with mixed vegetables.", spicy: "None" },
+                ]},
+                { title: "Famous Dish", dishes: [
+                    { name: "Kung Pao Chicken", image: "kung pao chicken.png", description: "Stir-fried chicken with peanuts in a spicy sauce.", spicy: "Hot" },
+                    { name: "Mapo Tofu", image: "mapo tofu.png", description: "Spicy tofu in a Sichuan pepper sauce.", spicy: "Very Hot" },
+                    { name: "General Tso's Chicken", image: "general tso's chicken.png", description: "Sweet and spicy fried chicken.", spicy: "Medium" },
+                ]}
+            ];
+    
+            return (
+                <div>
+                    <header>
+                        <h1>MR. Chuan - Chinese Restaurant</h1>
+                    </header>
+                    <nav>
+                        <a href="#Soup">Soup</a>
+                        <a href="#Noodle">Noodle</a>
+                        <a href="#FriedRice">Fried Rice</a>
+                        <a href="#FamousDish">Famous Dish</a>
+                    </nav>
+                    <div className="container">
+                        {categories.map(category => (
+                            <Category key={category.title} title={category.title} dishes={category.dishes} />
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+    
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+<button onclick="window.gtag('event', 'test_event');">Send Test Event</button>
+
+</body>
+<!-- Place this at the end of your body -->
+<script type="text/babel">
+    window.onload = function() {
+      // Your React code here
+    };
+</script>
+</html>
