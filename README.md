@@ -1,8 +1,6 @@
 # Chatbot-for-Chinese-Dish-Recommendation
 
-# Chinese Dish Recommendation Chatbot
-
-## Demo Overview
+## Core Function Demo Overview
 
 This chatbot helps recommend Chinese dishes based on user preferences. In the demo, users provide details such as age, gender, nationality, and preferences like love for spicy food or any dietary restrictions. The chatbot then uses this information to recommend dishes from a predefined menu, which includes options such as General Tso's Chicken, Sweet and Sour Pork, Chicken with Cashew Nuts, and more.
 
@@ -24,7 +22,5 @@ To calculate dish recommendations, we implemented a cosine similarity algorithm.
 
 ![Cosine Similarity Explanation](cosine_similarity_demo.png)
 
-## Conclusion
 
-This project demonstrates a basic implementation of a Chinese dish recommendation system using a chatbot. By leveraging user input and cosine similarity, the system can provide tailored dish recommendations. We also explored and tested data collection methods before settling on a mock dataset for the demo.
 
